@@ -103,7 +103,4 @@ void    map_validator(char **map, char *path)
     //ft_printf("\nc : %d\n", c);
     //printf("\n%d   %d\n", player_pos.y, player_pos.x);
     traverse_map(map, (t_pos){player_pos.y,  player_pos.x}, path);
-    pos.y = -1;
-    while (map[++pos.y])
-        printf("%s\n", map[pos.y]);
 }
