@@ -49,6 +49,7 @@ int main(int ac, char *av[])
     map_validator(screen.map, av[1]);
     screen.mlx = mlx_init();
     screen.mlx_win = mlx_new_window(screen.mlx, window_size(screen.map, 'w'), window_size(screen.map, 'h'), "so_long");
-    render_img_on_screen(screen);
+    load_img_to_struct(&screen);
+    render_img_on_screen(&screen);
     return (0);
 }

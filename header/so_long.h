@@ -47,8 +47,10 @@ typedef struct	s_dispaly
 	void		*mlx;
 	void		*mlx_win;
     char    	**map;
-	t_object	wall;
-	t_object	player;
+	t_object	w;
+	t_object	p;
+	t_object	e;
+	t_object	c;
 }		t_display;
 
 char    **map_reader(char *path_map);
@@ -58,7 +60,9 @@ void    map_validator(char **map, char *path);
 void	map_error(char **map);
 void	free_matrix(char **av);
 void	free_and_exit(t_display *screen, bool status);
-void    render_img_on_screen(t_display screen);
+void    render_img_on_screen(t_display *screen);
 void	traverse_map(char **map, t_pos begin, char *path);
+void    move_right(t_display *screen);
+void    load_img_to_struct(t_display *screen);
 
 #endif

@@ -14,13 +14,13 @@ NAME = so_long
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 MLX_FLAGS = -Lmlx -lmlx -L/mlx/lib -Imlx -lXext -lX11 -lm -lz
 
 SRC = so_long.c map_validations/map_reader.c	map_validations/map_utils.c \
 		map_validations/traverse_map.c so_long_utils/split.c so_long_utils/errors.c\
-		so_long_utils/window_game.c \
+		so_long_utils/window_game.c so_long_utils/move.c\
 
 MLX = ./mlx
 
