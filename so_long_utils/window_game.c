@@ -14,17 +14,18 @@
 
 int    move(int key_code, t_display *screen)
 {
-    //static int		move;
+    //screen->move = 0;
     if ((char)key_code == 27)
         free_and_exit(screen, true);
-    else if (key_code == 65363 || key_code == 100)
+    else if (key_code == RIGHT || key_code == 100)
         move_right(screen);
-    else if (key_code == 65361 || key_code == 97)
-        printf("\nleft\n");
-    else if (key_code == 65362 || key_code == 119)
-        printf("\nup\n");
-    else if (key_code == 65364 || key_code == 115)
-        printf("\ndown\n");
+    else if (key_code == LEFT || key_code == 97)
+        move_left(screen);
+    else if (key_code == UP || key_code == 119)
+        move_up(screen);
+    else if (key_code == DOWN || key_code == 115)
+        move_down(screen);
+    render_img_on_screen(screen);
     return (0);
 }
 
@@ -36,10 +37,11 @@ int    close_window(t_display *screen)
 
 void    load_img_to_struct(t_display *screen)
 {
-    screen->w.img_inf.path = "./img/cubo2.xpm";
-    screen->p.img_inf.path = "./img/P_front.xpm";
-    screen->e.img_inf.path = "./img/E.xpm";
-    screen->c.img_inf.path = "./img/energy.xpm";
+    screen->w.img_inf.path = "./img/xpm/1.xpm";
+    screen->p.img_inf.path = "./img/xpm/P_f.xpm";
+    screen->e.img_inf.path = "./img/xpm/E_nav.xpm";
+    screen->c.img_inf.path = "./img/xpm/C_collect.xpm";
+    screen->o.img_inf.path = "./img/xpm/0.xpm";
     screen->w.img = mlx_xpm_file_to_image(screen->mlx, screen->w.img_inf.path,
                 &screen->w.img_inf.width, &screen->w.img_inf.height);
     screen->p.img = mlx_xpm_file_to_image(screen->mlx, screen->p.img_inf.path,
@@ -48,6 +50,8 @@ void    load_img_to_struct(t_display *screen)
                 &screen->e.img_inf.width, &screen->e.img_inf.height);
     screen->c.img = mlx_xpm_file_to_image(screen->mlx, screen->c.img_inf.path,
                 &screen->c.img_inf.width, &screen->c.img_inf.height);
+    screen->o.img = mlx_xpm_file_to_image(screen->mlx, screen->o.img_inf.path,
+                &screen->c.img_inf.width, &screen->o.img_inf.height);
 }
 
 static void    hook_handler(t_display *screen)
@@ -80,6 +84,9 @@ void    render_img_on_screen(t_display *screen)
             else if (screen->map[y][x] == 'C')
                 mlx_put_image_to_window(screen->mlx, screen->mlx_win,
                         screen->c.img, x * 50, y * 50);
+            else
+                mlx_put_image_to_window(screen->mlx, screen->mlx_win,
+                        screen->o.img, x * 50, y * 50);
         }
     }
     hook_handler(screen);

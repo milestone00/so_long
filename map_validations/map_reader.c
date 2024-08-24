@@ -16,9 +16,11 @@ char    **map_reader(char *path_map)
 {
     int fd;
     int i;
+    int r;
     char    str[7000000];
     char    buffer;
 
+    i = 0;
     fd = open(path_map, O_RDONLY);
     if (fd < 0)
     {
@@ -28,8 +30,10 @@ char    **map_reader(char *path_map)
     i = 0;
     while (1)
     {
-        if (read(fd, &buffer, 1) == 1)
+        if ((r = read(fd, &buffer, 1)) == 1)
             str[i++] = buffer;
+        else if (r < 1)
+            return (NULL);
         else
         {
             str[i] = '\0';
@@ -58,49 +62,41 @@ void    check_invalid_char(char **map)
     }
 }
 
-void    map_validator(char **map, char *path)
+void    check_border(t_display *screen, t_pos pos, short *flag)
+{
+    if (screen->map[pos.y][pos.x] == 'P')
+    {
+        *flag += 1;
+        screen->P_y = pos.y;
+        screen->P_x = pos.x;
+    }
+    if (screen->map[pos.y][pos.x] == 'E')
+       *flag += 1;
+    if (pos.y == 0 || pos.y == (screen->height / 50) - 1)
+        if (screen->map[pos.y][pos.x] != '1')
+            map_error(screen->map);
+    if (pos.x == 0 || pos.x == (screen->width / 50) - 1)
+        if (screen->map[pos.y][pos.x] != '1')
+            map_error(screen->map);
+}
+
+void    map_validator(t_display *screen)
 {
     t_pos     pos;
-    t_pos     player_pos;
-    int     width;
-    int     height;
     short   flag;
-    short   c;
 
     pos.y = -1;
-    c = flag = 0;
-    player_pos = (t_pos){0, 0};
-    width = (window_size(map, 'w') / 50) - 1;
-    height = (window_size(map, 'h') / 50) - 1;
-    check_invalid_char(map);
-    while (map[++pos.y] && pos.y <= height)
+    flag = 0;
+    check_invalid_char(screen->map);
+    while (screen->map[++pos.y] && pos.y <= (screen->height / 50) - 1)
     {
         pos.x = -1;
-        while (map[pos.y][++pos.x] != '\0')
-        {
-            if (map[pos.y][pos.x] == 'P')
-            {
-                ++flag;
-                player_pos.y = pos.y;
-                player_pos.x = pos.x;
-            }
-            if (map[pos.y][pos.x] == 'E')
-                ++flag;
-            if (map[pos.y][pos.x] == 'C')
-                ++c;
-            if (pos.y == 0 || pos.y == height)
-                if (map[pos.y][pos.x] != '1')
-                    map_error(map);
-            if (pos.x == 0 || pos.x == width)
-                if (map[pos.y][pos.x] != '1')
-                    map_error(map);
-        }
-        if (pos.x != (width + 1))
-           map_error(map);
+        while (screen->map[pos.y][++pos.x] != '\0')
+            check_border(screen, (t_pos){pos.y, pos.x}, &flag);
+        if (pos.x != (screen->width / 50))
+           map_error(screen->map);
     }
-    if (flag != 2 || c < 1)
-        map_error(map);
-    //ft_printf("\nc : %d\n", c);
-    //printf("\n%d   %d\n", player_pos.y, player_pos.x);
-    traverse_map(map, (t_pos){player_pos.y,  player_pos.x}, path);
+    if (flag != 2 || check_collectable(screen->map) < 1)
+        map_error(screen->map);
+    traverse_map(screen);
 }

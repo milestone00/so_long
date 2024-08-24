@@ -14,7 +14,7 @@ NAME = so_long
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 MLX_FLAGS = -Lmlx -lmlx -L/mlx/lib -Imlx -lXext -lX11 -lm -lz
 

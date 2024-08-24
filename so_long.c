@@ -46,9 +46,11 @@ int main(int ac, char *av[])
     if (NULL == screen.map || (av[1][len - 1] != 'r' || av[1][len - 2] != 'e'
                             || av[1][len - 3] != 'b' || av[1][len - 4] != '.'))
         free_and_exit(&screen, false);
-    map_validator(screen.map, av[1]);
+    screen.height = window_size(screen.map, 'h');
+    screen.width = window_size(screen.map, 'w');
+    map_validator(&screen);
     screen.mlx = mlx_init();
-    screen.mlx_win = mlx_new_window(screen.mlx, window_size(screen.map, 'w'), window_size(screen.map, 'h'), "so_long");
+    screen.mlx_win = mlx_new_window(screen.mlx, screen.width, screen.height, "so_long");
     load_img_to_struct(&screen);
     render_img_on_screen(&screen);
     return (0);
