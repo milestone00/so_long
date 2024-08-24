@@ -12,21 +12,22 @@
 
 #include "../header/so_long.h"
 
-int		window_size(char **map, char flag)
+int	window_size(char **map, char flag)
 {
-    int		i;
+	int	i;
 
-    i = 0;
-    if (flag == 'w')
-    {
-        while (map[0][++i]) ;
-        return (i * 50);
-    }
-    else if (flag == 'h')
-    {
-        while (map[++i]) ;
-        return (i * 50);
-    }
-
-    return (0);
+	i = 0;
+	if (flag == 'w')
+	{
+		while (map[0][++i])
+			;
+		return (i * 50);
+	}
+	else if (flag == 'h')
+	{
+		while (map[++i])
+			;
+		return (i * 50);
+	}
+	return (0);
 }
